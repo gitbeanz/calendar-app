@@ -3,6 +3,7 @@ import java.time.ZoneOffset;
 import java.time.ZoneId;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 
 public class CalendarEvent extends Identifiable implements Comparable<CalendarEvent>{
     private String description;
@@ -39,6 +40,13 @@ public class CalendarEvent extends Identifiable implements Comparable<CalendarEv
         String startTimeString = "Start Time: " + startTime.format(formatter);
         String endTimeString = "End Time: " + endTime.format(formatter);
         return descriptionString + "\n" + startTimeString + "\n" + endTimeString + "\n";
+    }
+    public ZonedDateTime getStartTime(){
+        return this.startTime;
+    }
+    public static void main(String[] args){
+        //CalendarEvent event = new CalendarEvent("test", ZonedDateTime.now(), ZonedDateTime.now());
+        ;
     }
 }
 
