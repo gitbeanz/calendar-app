@@ -2,6 +2,7 @@ import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 import java.time.ZoneId;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class CalendarEvent extends Identifiable implements Comparable<CalendarEvent>{
     private String description;
@@ -26,16 +27,17 @@ public class CalendarEvent extends Identifiable implements Comparable<CalendarEv
     public boolean equals(Object other){
         if (other instanceof CalendarEvent){
             CalendarEvent otherCalendar = (CalendarEvent) other;
-            return (this.description == otherCalendar.description && this.startTime == otherCalendar.startTime && this.endTime == otherCalendar.endTime);
+            return (this == otherCalendar);
         }
         else{
             return false;
         }
     }
     public String toString(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM uuuu hh:mm a z");
         String descriptionString = "Description: " + description;
-        String startTimeString = "Start Time: " + startTime.toString();
-        String endTimeString = "End Time: " + endTime.toString();
+        String startTimeString = "Start Time: " + startTime.format(formatter);
+        String endTimeString = "End Time: " + endTime.format(formatter);
         return descriptionString + "\n" + startTimeString + "\n" + endTimeString + "\n";
     }
 }

@@ -4,13 +4,15 @@ public class Identifiable {
     private long id;
     public Identifiable(){
         nextID = UUID.randomUUID().getMostSignificantBits();
-        //System.out.println(nextID);
+        System.out.println(nextID);
         id = UUID.randomUUID().getMostSignificantBits();
-        //System.out.println(id);
+        System.out.println(id);
     }
-    public static void main(String[] args){
-        Identifiable id = new Identifiable();
+    public long getID(){
+        return id;
     }
+    
+
     
     
 }
