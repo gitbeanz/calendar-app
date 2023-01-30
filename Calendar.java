@@ -9,7 +9,7 @@ public class Calendar extends Identifiable{
     private Map<Long, CalendarEvent> events;
     private Map<String, List<CalendarEvent>> eventsPerDate;
     private boolean isPublic;
-    //private User owner;
+    private User owner;
     public Calendar(boolean isPublic){
         this.isPublic = isPublic;
     }
@@ -74,7 +74,7 @@ public class Calendar extends Identifiable{
         return eventList;
     }
     public String toString(){
-        String userString = "User's calendar";
+        String userString = owner + "'s calendar";
         String calendarString = String.format("Number of calendars: %d", this.events.size());
         return userString + "\n" + calendarString + "\n";
     }
