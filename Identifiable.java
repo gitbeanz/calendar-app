@@ -1,18 +1,15 @@
 import java.util.UUID;
+
 public class Identifiable {
-    private static long nextID;
     private long id;
-    public Identifiable(){
-        nextID = UUID.randomUUID().getMostSignificantBits();
-        System.out.println(nextID);
+
+    public Identifiable() {
         id = UUID.randomUUID().getMostSignificantBits();
-        System.out.println(id);
+        // System.out.println(id);
     }
-    public long getID(){
+
+    public long getID() {
         return id;
     }
-    
 
-    
-    
 }

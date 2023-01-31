@@ -1,5 +1,6 @@
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.time.ZoneOffset;
 import java.util.Map;
@@ -8,12 +9,17 @@ import java.time.temporal.ChronoField;
 public class Calendar extends Identifiable {
     private Map<Long, CalendarEvent> events;
     private Map<String, List<CalendarEvent>> eventsPerDate;
-    private boolean isPublic;
     private User owner;
     private String name;
+    private int eventSize;
 
-    public Calendar(String name) {
+    public Calendar(String name, User owner) {
         this.name = name;
+        this.events = new HashMap<Long, CalendarEvent>();
+        this.eventsPerDate = new HashMap<String, List<CalendarEvent>>();
+        this.eventSize = 0;
+        this.owner = owner;
+
     }
 
     public String getName() {
@@ -27,10 +33,12 @@ public class Calendar extends Identifiable {
     public void addEvent(String description, ZonedDateTime startTime, ZonedDateTime endTime) {
         CalendarEvent newEvent = new CalendarEvent(description, startTime, endTime);
         this.events.put(newEvent.getID(), newEvent);
+        this.eventSize += 1;
     }
 
     public void removeEvent(long eventID) {
         this.events.remove(eventID);
+        this.eventSize -= 1;
     }
 
     public void updateEvent(long eventID, String description, ZonedDateTime startTime, ZonedDateTime endTime) {
@@ -95,16 +103,9 @@ public class Calendar extends Identifiable {
     }
 
     public String toString() {
-        String userString = owner + "'s calendar";
-        String calendarString = String.format("Number of calendars: %d", this.events.size());
+        String userString = owner.getUsername() + "'s calendar";
+        String calendarString = String.format("Number of events: %d", this.eventSize);
         return userString + "\n" + calendarString + "\n";
     }
 
-    public boolean getIsPublic() {
-        return isPublic;
-    }
-
-    public void setIsPublic(boolean newIsPublic) {
-        this.isPublic = newIsPublic;
-    }
 }

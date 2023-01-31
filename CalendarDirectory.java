@@ -9,21 +9,29 @@ public class CalendarDirectory implements iCalendarDirectory {
     // DIFFERENCE
 
     public CalendarDirectory() {
-        calendars = new HashMap<String, Calendar>();
+        this.calendars = new HashMap<String, Calendar>();
+        this.userCalendars = new HashMap<Long, ArrayList<Calendar>>();
 
     }
 
     @Override
-    public List<Calendar> getCalendarsFor(long userID) {
+    public ArrayList<Calendar> getCalendarsFor(long userID) {
         // TODO Auto-generated method stub
-        return userCalendars.get(userID);
+        return this.userCalendars.get(userID);
     }
 
     @Override
     public void addCalendar(Calendar calendar, long userID) {
         // TODO Auto-generated method stub
-        calendars.put(calendar.getName(), calendar);
-        userCalendars.get(userID).add(calendar);
+        this.calendars.put(calendar.getName(), calendar);
+        if (userCalendars.containsKey(userID)) {
+            userCalendars.get(userID).add(calendar);
+        } else {
+            ArrayList<Calendar> calendarList = new ArrayList<Calendar>();
+            this.calendars.put(calendar.getName(), calendar);
+            this.userCalendars.put(userID, calendarList);
+            this.userCalendars.get(userID).add(calendar);
+        }
 
     }
 

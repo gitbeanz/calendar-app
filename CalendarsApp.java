@@ -34,6 +34,7 @@ public class CalendarsApp {
 
     public void createNewUser(String username) {
         User user = new User(username);
+        this.activeUser = user;
         userDirectory.addUser(user.getID(), user);
         System.out.println("User " + username + " successfully created!");
     }
@@ -51,7 +52,7 @@ public class CalendarsApp {
         this.activeCalendar.applyEventTimeZoneOffset(offset);
     }
 
-    public List<Calendar> getUserCalendars() {
+    public ArrayList<Calendar> getUserCalendars() {
         return calendarDirectory.getCalendarsFor(activeUser.getID());
     }
 
@@ -60,15 +61,15 @@ public class CalendarsApp {
     }
 
     public void createCalendar(String calendarName) {
-        Calendar calendar = new Calendar(calendarName);
-        calendarDirectory.addCalendar(calendar, calendar.getID());
+        Calendar calendar = new Calendar(calendarName, this.activeUser);
+        calendarDirectory.addCalendar(calendar, this.activeUser.getID());
     }
 
     public void removeCalendar(long calendarID) {
         List<Calendar> calendarList = calendarDirectory.getCalendarsFor(activeUser.getID());
         for (Calendar calendar : calendarList) {
             if (calendar.getID() == calendarID) {
-                calendarDirectory.removeCalendar(calendar, calendarID);
+                calendarDirectory.addCalendar(calendar, calendarID);
             }
         }
     }
@@ -101,19 +102,13 @@ public class CalendarsApp {
         this.activeCalendar.updateEvent(eventID, description, startTime, endTime);
     }
 
-    public void shareEventTo(String username, CalendarEvent event) {
-        eventSharer.shareEvent(this.userDirectory.getUser(username).getID(), event);
-    }
-
-    public CalendarEvent removeSharedEvent(long eventID) {
-        CalendarEvent event = this.activeCalendar.getEvents().get(eventID);
-        eventSharer.removeSharedEvent(this.activeUser.getID(), eventID);
-        return event;
-    }
-
-    public void addSharedEventToCalendar(long eventID) {
-        CalendarEvent event = this.activeCalendar.getEvents().get(eventID);
-        this.activeCalendar.addEvent(event.getDescription(), event.getStartTime(), event.getEndTime());
+    public String pickCalendar() {
+        System.out.println("\nList of Calendars:\n");
+        ArrayList<Calendar> userCalendars = this.getUserCalendars();
+        for (Calendar calendar : userCalendars) {
+            System.out.println(calendar.getName());
+        }
+        return "";
     }
 
 }
