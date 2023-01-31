@@ -6,14 +6,16 @@ public class UserSettings implements Settings {
     public UserSettings() {
         ;
     }
+
     @Override
     public String getSetting(String settingKey) {
         // TODO Auto-generated method stub
-        return null;
+        return "";
     }
+
     @Override
     public void setSetting(String setting, String state) {
         // TODO Auto-generated method stub
-        
+        ;
     }
 }

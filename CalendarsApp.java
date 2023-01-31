@@ -3,164 +3,117 @@ import java.time.Year;
 import java.time.YearMonth;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
-public class CalendarsApp implements iUserDirectory, iCalendarDirectory, Sharer {
-    private iUserDirectory userDirectory;
-    private iCalendarDirectory calendarDirectory;
-    private Sharer eventSharer;
+public class CalendarsApp {
+    private UserDirectory userDirectory;
+    private CalendarDirectory calendarDirectory;
+    private EventSharer eventSharer;
+    private User activeUser;
     private Calendar activeCalendar;
 
-    public CalendarsApps(){
-        ;
+    public CalendarsApp() {
+        this.userDirectory = new UserDirectory();
+        this.calendarDirectory = new CalendarDirectory();
+        this.eventSharer = new EventSharer();
     }
 
     public List<String> getUsernameList() {
-        ;
+        List<User> userList = this.userDirectory.getUserList();
+        List<String> usernameList = new ArrayList<String>();
+        for (User user : userList) {
+            usernameList.add(user.getUsername());
+        }
+        // System.out.println("Here is the list of usernames\n");
+        // System.out.println(usernameList);
+        return usernameList;
     }
 
     public void createNewUser(String username) {
-        ;
+        User user = new User(username);
+        userDirectory.addUser(user.getID(), user);
+        System.out.println("User " + username + " successfully created!");
     }
 
     public void loginUser(String username) {
-        ;
+        if (getUsernameList().contains(username)) {
+            // login user
+            activeUser = userDirectory.getUser(username);
+        } else {
+            System.out.println("Error! Could not log in. Username not found...\n");
+        }
     }
 
     public void setTimeZone(ZoneOffset offset) {
-        ;
-    }
-
-    public void setTheme(String theme) {
-        ;
-    }
-
-    public String getTheme() {
-        return "";
-    }
-
-    public List<Calendar> getPublicCalendars() {
-        ;
+        this.activeCalendar.applyEventTimeZoneOffset(offset);
     }
 
     public List<Calendar> getUserCalendars() {
-        ;
+        return calendarDirectory.getCalendarsFor(activeUser.getID());
     }
 
     public void setActiveCalendars(Calendar calendar) {
-        ;
+        this.activeCalendar = calendar;
     }
 
-    public void createCalendar(boolean isPublic) {
-        ;
+    public void createCalendar(String calendarName) {
+        Calendar calendar = new Calendar(calendarName);
+        calendarDirectory.addCalendar(calendar, calendar.getID());
     }
 
     public void removeCalendar(long calendarID) {
-        ;
+        List<Calendar> calendarList = calendarDirectory.getCalendarsFor(activeUser.getID());
+        for (Calendar calendar : calendarList) {
+            if (calendar.getID() == calendarID) {
+                calendarDirectory.removeCalendar(calendar, calendarID);
+            }
+        }
     }
 
-    public void changeCalendarPrivacy(boolean isPublic) {
-        ;
+    public List<CalendarEvent> getEventsForDay(ZonedDateTime date) {
+        return this.activeCalendar.getEventsForDay(date);
     }
 
-    public List<CalendarEvent> getEventsForDay(LocalDate date) {
-        ;
+    public List<CalendarEvent> getEventsForWeek(ZonedDateTime date) {
+        return this.activeCalendar.getEventsForWeek(date);
     }
 
-    public List<CalendarEvent> getEventsForWeek(LocalDate date) {
-        ;
+    public List<CalendarEvent> getEventsForMonth(ZonedDateTime date) {
+        return this.activeCalendar.getEventsForMonth(date);
     }
 
-    public List<CalendarEvent> getEventsForMonth(YearMonth month) {
-        ;
-    }
-
-    public List<CalendarEvent> getEventsForYear(Year year) {
-        ;
+    public List<CalendarEvent> getEventsForYear(ZonedDateTime date) {
+        return this.activeCalendar.getEventsForYear(date);
     }
 
     public void addEvent(String description, ZonedDateTime startTime, ZonedDateTime endTime) {
-        ;
+        this.activeCalendar.addEvent(description, startTime, endTime);
     }
 
     public void removeEvent(long eventID) {
-        ;
+        this.activeCalendar.removeEvent(eventID);
     }
 
     public void updateEvent(long eventID, String description, ZonedDateTime startTime, ZonedDateTime endTime) {
-        ;
+        this.activeCalendar.updateEvent(eventID, description, startTime, endTime);
     }
 
     public void shareEventTo(String username, CalendarEvent event) {
-        ;
+        eventSharer.shareEvent(this.userDirectory.getUser(username).getID(), event);
     }
 
     public CalendarEvent removeSharedEvent(long eventID) {
-        ;
+        CalendarEvent event = this.activeCalendar.getEvents().get(eventID);
+        eventSharer.removeSharedEvent(this.activeUser.getID(), eventID);
+        return event;
     }
 
     public void addSharedEventToCalendar(long eventID) {
-        ;
-    }
-
-    @Override
-    public void shareEvent(long userID, CalendarEvent event) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public CalendarEvent removeSharedEvent(long userID, long eventID) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Calendar> getCalendarsFor(long userID) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void addCalendar(Calendar calendar) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void changeCalendarPrivacy(long userID, long calendarID, boolean isPublic) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void removeUser(long userID) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public List<User> getUserList() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public long getIDFor(String username) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public User getUser(long userID) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void changeUsername(String oldUsername, String newUsername) {
-        // TODO Auto-generated method stub
-
+        CalendarEvent event = this.activeCalendar.getEvents().get(eventID);
+        this.activeCalendar.addEvent(event.getDescription(), event.getStartTime(), event.getEndTime());
     }
 
 }

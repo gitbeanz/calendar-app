@@ -1,57 +1,35 @@
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CalendarDirectory implements iCalendarDirectory {
-    private List<Calendar> publicCalendars;
-    private Map<Long, List<Calendar>> privateCalendars;
+    private Map<String, Calendar> calendars;
+    private Map<Long, ArrayList<Calendar>> userCalendars;
+    // DIFFERENCE
 
-    public CalendarDirectory(List<Calendar> publicCalendars, Map<Long, List<Calendar>> privateCalendars) {
-        this.publicCalendars = publicCalendars;
-        this.privateCalendars = privateCalendars;
-    }
+    public CalendarDirectory() {
+        calendars = new HashMap<String, Calendar>();
 
-    @Override
-    public List<Calendar> getPublicCalendars() {
-        // TODO Auto-generated method stub
-        return publicCalendars;
     }
 
     @Override
     public List<Calendar> getCalendarsFor(long userID) {
         // TODO Auto-generated method stub
-        return privateCalendars.get(userID);
+        return userCalendars.get(userID);
     }
 
     @Override
     public void addCalendar(Calendar calendar, long userID) {
         // TODO Auto-generated method stub
-        if (calendar.getIsPublic()) {
-            publicCalendars.add(calendar);
-        } else {
-            privateCalendars.get(userID).add(calendar);
-        }
+        calendars.put(calendar.getName(), calendar);
+        userCalendars.get(userID).add(calendar);
 
     }
 
-    @Override
-    public void changeCalendarPrivacy(long userID, long calendarID, boolean isPublic) {
+    public void removeCalendar(Calendar calendar, long userID) {
         // TODO Auto-generated method stub
-        if (isPublic) {
-            for (Calendar calendar : publicCalendars) {
-                if (calendar.getID() == calendarID) {
-                    calendar.setIsPublic(false);
-                    publicCalendars.remove(calendar);
-                    privateCalendars.get(userID).add(calendar);
-                }
-            }
-        } else {
-            for (Calendar calendar : privateCalendars.get(userID) {
-                calendar.setIsPublic(true);
-                privateCalendars.remove(userID);
-                publicCalendars.add(calendar);
-
-            }
-        }
-
+        calendars.remove(calendar.getName());
+        userCalendars.get(userID).remove(calendar);
     }
 }

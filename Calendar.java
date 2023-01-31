@@ -10,9 +10,18 @@ public class Calendar extends Identifiable {
     private Map<String, List<CalendarEvent>> eventsPerDate;
     private boolean isPublic;
     private User owner;
+    private String name;
 
-    public Calendar(boolean isPublic) {
-        this.isPublic = isPublic;
+    public Calendar(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Map<Long, CalendarEvent> getEvents() {
+        return events;
     }
 
     public void addEvent(String description, ZonedDateTime startTime, ZonedDateTime endTime) {

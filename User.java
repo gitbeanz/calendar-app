@@ -9,4 +9,8 @@ public class User extends Identifiable {
     public void setUsername(String newUsername) {
         this.username = newUsername;
     }
+
+    public String getUsername() {
+        return this.username;
+    }
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -6,9 +7,10 @@ public class UserDirectory implements iUserDirectory {
     private Map<Long, User> users;
     private Map<String, Long> usernameIDs;
 
-    public UserDirectory(Map<Long, User> users, Map<String, Long> usernameIDs) {
-        this.users = users;
-        this.usernameIDs = usernameIDs;
+    public UserDirectory() {
+        this.users = new HashMap<Long, User>();
+        this.usernameIDs = new HashMap<String, Long>();
+
     }
 
     @Override
@@ -44,5 +46,18 @@ public class UserDirectory implements iUserDirectory {
     public void changeUsername(String oldUsername, String newUsername) {
         // TODO Auto-generated method stub
         users.get(usernameIDs.get(oldUsername)).setUsername(newUsername);
+    }
+
+    @Override
+    public void addUser(long userID, User user) {
+        // TODO Auto-generated method stub
+        users.put(userID, user);
+        usernameIDs.put(user.getUsername(), userID);
+    }
+
+    @Override
+    public User getUser(String username) {
+        // TODO Auto-generated method stub
+        return getUser(usernameIDs.get(username));
     }
 }
