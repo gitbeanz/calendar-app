@@ -40,4 +40,10 @@ public class CalendarDirectory implements iCalendarDirectory {
         calendars.remove(calendar.getName());
         userCalendars.get(userID).remove(calendar);
     }
+
+    @Override
+    public Calendar getCalendar(String calendarName) {
+        // TODO Auto-generated method stub
+        return calendars.get(calendarName);
+    }
 }

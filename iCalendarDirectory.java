@@ -9,4 +9,5 @@ interface iCalendarDirectory {
 
     public void removeCalendar(Calendar calendar, long userID);
 
+    public Calendar getCalendar(String calendarName);
 }

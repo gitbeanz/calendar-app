@@ -39,11 +39,11 @@ public class CalendarEvent extends Identifiable implements Comparable<CalendarEv
     }
 
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM uuuu hh:mm a z");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E MMM dd uuuu hh:mm a z");
         String descriptionString = "Description: " + description;
         String startTimeString = "Start Time: " + startTime.format(formatter);
         String endTimeString = "End Time: " + endTime.format(formatter);
-        return descriptionString + "\n" + startTimeString + "\n" + endTimeString + "\n";
+        return "\n" + descriptionString + "\n" + startTimeString + "\n" + endTimeString + "\n";
     }
 
     public ZonedDateTime getStartTime() {

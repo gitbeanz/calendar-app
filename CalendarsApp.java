@@ -102,13 +102,69 @@ public class CalendarsApp {
         this.activeCalendar.updateEvent(eventID, description, startTime, endTime);
     }
 
-    public String pickCalendar() {
+    public String pickCalendar(String action) {
         System.out.println("\nList of Calendars:\n");
         ArrayList<Calendar> userCalendars = this.getUserCalendars();
+        ArrayList<String> calendarNames = new ArrayList<String>();
+        String selectedCalendar;
         for (Calendar calendar : userCalendars) {
             System.out.println(calendar.getName());
+            calendarNames.add(calendar.getName());
         }
-        return "";
+        while (true) {
+            Scanner calendarNameScanner = new Scanner(System.in);
+            System.out.println("\nPlease enter the name of the calendar you wish to " + action);
+            selectedCalendar = calendarNameScanner.next();
+            if (calendarNames.contains(selectedCalendar)) {
+                this.activeCalendar = getCalendar(selectedCalendar);
+                break;
+            } else {
+                System.out.println("\nOops! name not found. Please try again.");
+            }
+        }
+        return selectedCalendar;
+    }
+
+    public Calendar getCalendar(String calendarName) {
+        return calendarDirectory.getCalendar(calendarName);
+    }
+
+    public int pickView() {
+        int viewInt;
+        while (true) {
+            System.out.println("\nView Page");
+            System.out.println("\n1. Today's Events");
+            System.out.println("2. Week's Events");
+            System.out.println("3. Month's Events");
+            System.out.println("4. Year's Events");
+
+            Scanner viewScanner = new Scanner(System.in);
+            System.out.println("What would you like to view?");
+            viewInt = viewScanner.nextInt();
+            if (viewInt == 1 || viewInt == 2 || viewInt == 3 || viewInt == 4) {
+                break;
+            } else {
+                System.out.println("\nOops! Please try again\n");
+            }
+        }
+        return viewInt;
+    }
+
+    public int pickUpdate() {
+        int updateInt;
+        while (true) {
+            System.out.println("\nUpdate Page");
+            System.out.println("\n1. Add Event Page");
+            System.out.println("2. Update Event Page");
+            System.out.println("3. Remove Event Page\n");
+            Scanner updateScanner = new Scanner(System.in);
+            System.out.println("What would you like to update?");
+            updateInt = updateScanner.nextInt();
+            if (updateInt == 1 || updateInt == 2 || updateInt == 3) {
+                break;
+            }
+        }
+        return updateInt;
     }
 
 }

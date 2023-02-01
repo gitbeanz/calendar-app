@@ -32,6 +32,7 @@ public class Calendar extends Identifiable {
 
     public void addEvent(String description, ZonedDateTime startTime, ZonedDateTime endTime) {
         CalendarEvent newEvent = new CalendarEvent(description, startTime, endTime);
+        System.out.println("Event successfully created");
         this.events.put(newEvent.getID(), newEvent);
         this.eventSize += 1;
     }
